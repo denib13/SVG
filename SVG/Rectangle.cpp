@@ -12,7 +12,7 @@ Rectangle::Rectangle(double x, double y, double height, double width, double rx,
 
 Shape* Rectangle::clone() const
 {
-	return new Shape(*this);
+	return new Rectangle(*this);
 }
 
 void Rectangle::print() const

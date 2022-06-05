@@ -4,6 +4,6 @@ class Shape
 {
 public:
 	virtual ~Shape() = default;
-	virtual void print() const;
-	virtual Shape* clone() const;
+	virtual void print() const = 0;
+	virtual Shape* clone() const = 0;
 };
