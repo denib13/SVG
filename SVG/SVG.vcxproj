@@ -141,18 +141,23 @@
   <ItemGroup>
     <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Line.cpp" />
+    <ClCompile Include="MyString.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="ShapeCollection.cpp" />
     <ClCompile Include="SVG.cpp" />
+    <ClCompile Include="SVGParser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Tickets\Tickets\List.hpp" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="MyString.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="ShapeCollection.h" />
+    <ClInclude Include="SVGParser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

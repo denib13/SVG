@@ -1,7 +1,7 @@
 #include "Circle.h"
 #include <iostream>
 
-Circle::Circle(double x, double y, double radius) : center(x,y)
+Circle::Circle(double x, double y, double radius, const char* fill) : center(x,y), fill(fill)
 {
 	this->radius = radius;
 }
@@ -13,6 +13,7 @@ Shape* Circle::clone() const
 
 void Circle::print() const
 {
+	std::cout << "circle ";
 	center.print();
-	std::cout << " " << radius;
+	std::cout << " " << radius << " " << fill;
 }

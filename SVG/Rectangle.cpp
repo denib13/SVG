@@ -1,13 +1,11 @@
 #include "Rectangle.h"
 #include <iostream>
 
-Rectangle::Rectangle(double x, double y, double height, double width, double rx, double ry)
-	: topLeft(x,y)
+Rectangle::Rectangle(double x, double y, double height, double width, const char* fill)
+	: topLeft(x,y), fill(fill)
 {
 	this->height = height;
 	this->width = width;
-	this->rx = rx;
-	this->ry = ry;
 }
 
 Shape* Rectangle::clone() const
@@ -17,6 +15,7 @@ Shape* Rectangle::clone() const
 
 void Rectangle::print() const
 {
+	std::cout << "rectangle ";
 	topLeft.print();
-	std::cout << " " << height << " " << width << " " << rx << " " << ry;
+	std::cout << " " << height << " " << width << " " << fill;
 }

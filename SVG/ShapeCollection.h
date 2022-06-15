@@ -11,12 +11,16 @@ class ShapeCollection
 	void free();
 	void copyFrom(const ShapeCollection& other);
 public:
+	friend class SVGParser;
+	ShapeCollection();
 	ShapeCollection(const ShapeCollection& other);
 	ShapeCollection(ShapeCollection&& other);
 	~ShapeCollection();
 
 	ShapeCollection& operator=(const ShapeCollection& other);
 	ShapeCollection& operator=(ShapeCollection&& other);
+
+	size_t getCount() const;
 
 	void addShape(const Shape& newShape);
 };

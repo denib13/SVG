@@ -33,6 +33,13 @@ void ShapeCollection::copyFrom(const ShapeCollection& other)
 	}
 }
 
+ShapeCollection::ShapeCollection()
+{
+	count = 0;
+	capacity = 4;
+	shapes = new Shape * [capacity];
+}
+
 ShapeCollection::ShapeCollection(const ShapeCollection& other)
 {
 	copyFrom(other);
@@ -66,6 +73,7 @@ ShapeCollection& ShapeCollection::operator=(ShapeCollection&& other)
 {
 	if (this != &other)
 	{
+		free();
 		count = other.count;
 		capacity = other.capacity;
 
@@ -73,6 +81,11 @@ ShapeCollection& ShapeCollection::operator=(ShapeCollection&& other)
 		other.shapes = nullptr;
 	}
 	return *this;
+}
+
+size_t ShapeCollection::getCount() const
+{
+	return count;
 }
 
 void ShapeCollection::addShape(const Shape& newShape)

@@ -12,6 +12,7 @@ Shape* Line::clone() const
 
 void Line::print() const
 {
+	std::cout << "line ";
 	start.print();
 	std::cout << " ";
 	end.print();

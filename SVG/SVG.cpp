@@ -1,6 +1,11 @@
 ﻿#include <iostream>
+#include "SVGParser.h"
+#include "MyString.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    SVGParser p;
+    p.help();
+    p.open("figures.svg");
+    p.print();
 }
