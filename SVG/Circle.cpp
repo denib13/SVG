@@ -17,3 +17,15 @@ void Circle::print() const
 	center.print();
 	std::cout << " " << radius << " " << fill;
 }
+
+void Circle::writeShapeToFile(std::ostream& stream) const
+{
+	stream << *this;
+}
+
+std::ostream& operator<<(std::ostream& stream, const Circle& circle)
+{
+	stream << "circle cx=\"" << circle.center.getX() << "\" cy=\"" << circle.center.getY() <<
+		"\" r=\"" << circle.radius << "\" fill=\"" << circle.fill << "\"";
+	return stream;
+}

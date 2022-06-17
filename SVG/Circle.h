@@ -14,4 +14,7 @@ public:
 
 	Shape* clone() const override;
 	void print() const override;
+	void writeShapeToFile(std::ostream& stream) const override;
+
+	friend std::ostream& operator<<(std::ostream& stream, const Circle& circle);
 };

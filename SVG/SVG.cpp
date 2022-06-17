@@ -5,7 +5,9 @@
 int main()
 {
     SVGParser p;
-    p.help();
-    p.open("figures.svg");
+    p.run();
+    //p.help();
+    /*p.open("figures.svg");
     p.print();
+    p.save("f.svg");*/
 }

@@ -1,10 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include "SVGParser.h"
-#include "MyString.h"
-#include "Rectangle.h"
-#include "Circle.h"
-#include "Line.h"
 
 void SVGParser::readSvg(std::fstream& file)
 {
@@ -49,6 +45,15 @@ void SVGParser::readSvg(std::fstream& file)
 		else
 			startIndex++;
 	}
+}
+
+void SVGParser::writeSvg(std::fstream& file)
+{
+	file << "<?xml version=\"1.0\" standalone=\"no\"?>\n";
+	file << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n" << "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
+	file << "<svg>\n";
+	file << shapesList;
+	file << "</svg>";
 }
 
 MyString getProperties(MyString& word)
@@ -101,7 +106,7 @@ void SVGParser::createLine(MyString& figureData)
 }
 
 
-SVGParser::SVGParser() : shapesList()
+SVGParser::SVGParser() : shapesList(), currFilePath(), isFileOpen(false)
 { }
 
 void closeFile(std::fstream& file)
@@ -116,20 +121,99 @@ void closeFile(std::fstream& file)
 	}
 }
 
-void SVGParser::open(const char* filePath)
+void SVGParser::run()
 {
-	std::fstream file(filePath, std::ios::in);
-	if (!file.is_open())
+	CmdType commandType;
+	do
 	{
-		closeFile(file);
-		std::fstream createFile(filePath, std::ios::out);
-		closeFile(createFile);
+		Command command;
+		command.takeCommand();
+		commandType = command.getType();
+		switch (commandType)
+		{
+		case 0: open(command); break;
+		//case 1: close(); break;
+		case 2: save(); break;
+		case 3: saveas(command); break;
+		case 4: help(); break;
+		//case 5: exit(); break;
+		case 6: print(); break;
+		case 7: create(command); break;
+		//case 8: erase(command); break;
+		//case 9: translate(command); break;
+		//case 10: withinRegion(command); break;
+		default:
+			break;
+		}
+	} while (!(commandType == CmdType::exitCmd));
+}
+
+void SVGParser::open(Command& command)
+{
+	if (isFileOpen)
+	{
+		std::cout << "A file is currently open. Close it first before opening new one! \n";
 	}
 	else
 	{
-		std::cout << "Successfully opened " << filePath << "!\n";
-		readSvg(file);
+		MyString filePath = command.getFilePath();
+		currFilePath = filePath;
+		isFileOpen = true;
+
+		std::fstream file(filePath.getString(), std::ios::in);
+		if (!file.is_open())
+		{
+			closeFile(file);
+			std::fstream createFile(filePath.getString(), std::ios::out);
+			closeFile(createFile);
+		}
+		else
+		{
+			std::cout << "Successfully opened " << filePath << "!\n";
+			readSvg(file);
+			closeFile(file);
+		}
+	}
+}
+
+void SVGParser::save()
+{
+	if (isFileOpen)
+	{
+		std::fstream file(currFilePath.getString(), std::ios::out);
+		if (!file.is_open())
+			std::cout << "Error writing to file! \n";
+		else
+		{
+			writeSvg(file);
+			std::cout << "Successfully saved file " << currFilePath << "!\n";
+		}
 		closeFile(file);
+	}
+	else
+	{
+		std::cout << "There is no currently opened file! \n";
+	}
+}
+
+void SVGParser::saveas(Command& command)
+{
+	if (isFileOpen)
+	{
+		MyString filePath = command.getFilePath();
+		std::fstream file(filePath.getString(), std::ios::out);
+		if (!file.is_open())
+			std::cout << "Error writing to file! \n";
+		else
+		{
+			writeSvg(file);
+			std::cout << "Successfully saved file " << filePath << "!\n";
+		}
+		closeFile(file);
+	}
+	else
+	{
+		std::cout << "There is no currently opened file! \n";
 	}
 }
 
@@ -179,4 +263,22 @@ void SVGParser::print() const
 		shapesList.shapes[i]->print();
 		std::cout << '\n';
 	}
+}
+
+void SVGParser::create(Command& command)
+{
+	if (isFileOpen)
+	{
+		MyString figureType = command.getFigureType();
+		if (figureType == "rectangle")
+			shapesList.addShape(command.getRectangleData());
+		else if (figureType == "circle")
+			shapesList.addShape(command.getCircleData());
+		else if (figureType == "line")
+			shapesList.addShape(command.getLineData());
+		else
+			std::cout << "Invalid figure type! \n";
+	}
+	else
+		std::cout << "Open a file first! \n";
 }

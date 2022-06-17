@@ -19,8 +19,12 @@ public:
 
 	ShapeCollection& operator=(const ShapeCollection& other);
 	ShapeCollection& operator=(ShapeCollection&& other);
+	Shape* operator[](size_t index) const;
+	friend std::ostream& operator<<(std::ostream& stream, const ShapeCollection& col);
 
 	size_t getCount() const;
 
 	void addShape(const Shape& newShape);
+	void emptyCollection();
+	void deleteAtIndex(size_t index);
 };

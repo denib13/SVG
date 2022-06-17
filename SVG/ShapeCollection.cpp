@@ -1,4 +1,8 @@
 #include "ShapeCollection.h"
+#include <exception>
+#include <iostream>
+
+const unsigned DEFAULT_CAPACITY = 4;
 
 void ShapeCollection::resize()
 {
@@ -36,7 +40,7 @@ void ShapeCollection::copyFrom(const ShapeCollection& other)
 ShapeCollection::ShapeCollection()
 {
 	count = 0;
-	capacity = 4;
+	capacity = DEFAULT_CAPACITY;
 	shapes = new Shape * [capacity];
 }
 
@@ -83,6 +87,13 @@ ShapeCollection& ShapeCollection::operator=(ShapeCollection&& other)
 	return *this;
 }
 
+Shape* ShapeCollection::operator[](size_t index) const
+{
+	if (index < 0 || index >= count)
+		throw std::exception("Index out of range!");
+	return shapes[index]->clone();
+}
+
 size_t ShapeCollection::getCount() const
 {
 	return count;
@@ -93,4 +104,37 @@ void ShapeCollection::addShape(const Shape& newShape)
 	if (count == capacity)
 		resize();
 	shapes[count++] = newShape.clone();
+}
+
+void ShapeCollection::emptyCollection()
+{
+	free();
+	count = 0;
+	capacity = DEFAULT_CAPACITY;
+	shapes = new Shape * [capacity];
+}
+
+void ShapeCollection::deleteAtIndex(size_t index)
+{
+	if (index < 0 || index >= count)
+		throw std::exception("Index out of range!");
+	else
+	{
+		delete shapes[index];
+ 		for (size_t i = index; i < count - 1; i++)
+		{
+			shapes[i] = shapes[i + 1];
+		}
+	}
+}
+
+std::ostream& operator<<(std::ostream& stream, const ShapeCollection& col)
+{
+	for (size_t i = 0; i < col.count; i++)
+	{
+		stream << "\t <";
+		col.shapes[i]->writeShapeToFile(stream);
+		stream << "/>\n";
+	}
+	return stream;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Shape.h"
 #include "Point.h"
+using namespace std;
 
 class Line : public virtual Shape
 {
@@ -12,4 +13,7 @@ public:
 
 	Shape* clone() const override;
 	void print() const override;
+	void writeShapeToFile(std::ostream& stream) const override;
+
+	friend std::ostream& operator<<(std::ostream& stream, const Line& line);
 };

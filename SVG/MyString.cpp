@@ -128,11 +128,21 @@ int MyString::indexOf(const MyString& element) const
 	return -1;
 }
 
+int MyString::indexOfChar(char symbol) const
+{
+	for (size_t i = 0; i < size; i++)
+	{
+		if (str[i] == symbol)
+			return i;
+	}
+	return -1;
+}
+
 MyString MyString::substring(unsigned startIndex, unsigned endIndex) const
 {
 	if (startIndex > endIndex)
 		throw std::exception("Start index cannot be bigger than end index!");
-	if (endIndex >= size)
+	if (endIndex >= size || endIndex < 0)
 		throw std::exception("Invalid end index!");
 
 	char* substring = new char[endIndex - startIndex + 1];

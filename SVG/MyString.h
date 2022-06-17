@@ -31,6 +31,7 @@ public:
 	friend std::istream& operator>>(std::istream& stream, MyString& string);
 
 	int indexOf(const MyString& element) const;
+	int indexOfChar(char symbol) const;
 	MyString substring(unsigned startIndex, unsigned endIndex) const;
 	char charAtIndex(unsigned index) const;
 
