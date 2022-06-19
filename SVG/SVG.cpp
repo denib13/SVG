@@ -10,4 +10,5 @@ int main()
     /*p.open("figures.svg");
     p.print();
     p.save("f.svg");*/
+    //std::cout << atoi("vertucal=10");
 }

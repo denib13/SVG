@@ -65,9 +65,6 @@
     <ClInclude Include="SVGParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Tickets\Tickets\List.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MyString.h">
       <Filter>Header Files</Filter>
     </ClInclude>

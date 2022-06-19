@@ -183,6 +183,34 @@ double MyString::toDouble() const
 	return result;
 }
 
+void MyString::cutIntervalsInBeginning()
+{
+	int lastIntervalIndex = -1;
+	for (size_t i = 0; i < size; i++)
+	{
+		if (str[i] == ' ')
+			lastIntervalIndex = i;
+		else
+			break;
+	}
+	if (lastIntervalIndex != -1)
+		trim(lastIntervalIndex + 1);
+}
+
+void MyString::cutIntervalsAtEnd()
+{
+	int lastIntervalIndex = -1;
+	for (size_t i = size - 1; i >= 0; i--)
+	{
+		if (str[i] == ' ')
+			lastIntervalIndex = i;
+		else
+			break;
+	}
+	if (lastIntervalIndex != -1)
+		setString(substring(0, lastIntervalIndex).getString());
+}
+
 std::ostream& operator<<(std::ostream& stream, const MyString& string)
 {
 	stream << string.str;

@@ -36,4 +36,8 @@ public:
 	Circle getCircleData();
 	Line getLineData();
 	MyString getProperties();
+	int getEraseIndex();
+	int getTranslateIndex();
+	double getTranslatePropertyValue();
+	MyString getTranslateProperty();
 };

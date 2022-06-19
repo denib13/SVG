@@ -24,6 +24,18 @@ void Line::writeShapeToFile(std::ostream& stream) const
 	stream << *this;
 }
 
+void Line::translateVertical(double value)
+{
+	start.setY(start.getY() + value);
+	end.setY(end.getY() + value);
+}
+
+void Line::translateHorizontal(double value)
+{
+	start.setX(start.getX() + value);
+	end.setX(end.getX() + value);
+}
+
 ostream& operator<<(ostream& stream, const Line& line)
 {
 	stream << "line x1=\"" << line.start.getX() << "\" y1=\"" << line.start.getY() <<

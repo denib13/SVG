@@ -25,6 +25,16 @@ void Rectangle::writeShapeToFile(std::ostream& stream) const
 	stream << *this;
 }
 
+void Rectangle::translateVertical(double value)
+{
+	topLeft.setY(topLeft.getY() + value);
+}
+
+void Rectangle::translateHorizontal(double value)
+{
+	topLeft.setX(topLeft.getX() + value);
+}
+
 std::ostream& operator<<(std::ostream& stream, const Rectangle& rect)
 {
 	stream << "rect x=\"" << rect.topLeft.getX() << "\" y=\"" << rect.topLeft.getY() <<

@@ -125,6 +125,7 @@ void ShapeCollection::deleteAtIndex(size_t index)
 		{
 			shapes[i] = shapes[i + 1];
 		}
+		count--;
 	}
 }
 

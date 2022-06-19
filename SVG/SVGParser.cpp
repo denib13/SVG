@@ -132,20 +132,20 @@ void SVGParser::run()
 		switch (commandType)
 		{
 		case 0: open(command); break;
-		//case 1: close(); break;
+		case 1: close(); break;
 		case 2: save(); break;
 		case 3: saveas(command); break;
 		case 4: help(); break;
-		//case 5: exit(); break;
+		case 5: exit(); break;
 		case 6: print(); break;
 		case 7: create(command); break;
-		//case 8: erase(command); break;
-		//case 9: translate(command); break;
+		case 8: erase(command); break;
+		case 9: translate(command); break;
 		//case 10: withinRegion(command); break;
 		default:
 			break;
 		}
-	} while (!(commandType == CmdType::exitCmd));
+	} while (!(commandType == CmdType::exitCmd && isFileOpen == false));
 }
 
 void SVGParser::open(Command& command)
@@ -173,6 +173,21 @@ void SVGParser::open(Command& command)
 			readSvg(file);
 			closeFile(file);
 		}
+	}
+}
+
+void SVGParser::close()
+{
+	if (isFileOpen)
+	{
+		shapesList.emptyCollection();
+		isFileOpen = false;
+		std::cout << "Successfully closed " << currFilePath << "!\n";
+		currFilePath = "";
+	}
+	else
+	{
+		std::cout << "There is no currently open file!\n";
 	}
 }
 
@@ -255,14 +270,27 @@ void SVGParser::help()
 	std::cout << "prints all figures in the region; option - circle or rectangle \n";
 }
 
+void SVGParser::exit()
+{
+	if (isFileOpen)
+		std::cout << "You have an open file with unsaved changes, please select close or save first.\n";
+	else
+		std::cout << "Exiting program...\n";
+}
+
 void SVGParser::print() const
 {
-	for (size_t i = 0; i < shapesList.count; i++)
+	if (isFileOpen)
 	{
-		std::cout << (i + 1) << ". ";
-		shapesList.shapes[i]->print();
-		std::cout << '\n';
+		for (size_t i = 0; i < shapesList.count; i++)
+		{
+			std::cout << (i + 1) << ". ";
+			shapesList.shapes[i]->print();
+			std::cout << '\n';
+		}
 	}
+	else
+		std::cout << "There is no currently open file!\n";
 }
 
 void SVGParser::create(Command& command)
@@ -271,14 +299,88 @@ void SVGParser::create(Command& command)
 	{
 		MyString figureType = command.getFigureType();
 		if (figureType == "rectangle")
+		{
 			shapesList.addShape(command.getRectangleData());
+			std::cout << "Successfully created rectangle (" << shapesList.count << ")\n";
+		}
 		else if (figureType == "circle")
+		{
 			shapesList.addShape(command.getCircleData());
+			std::cout << "Successfully created circle (" << shapesList.count << ")\n";
+		}
 		else if (figureType == "line")
+		{
 			shapesList.addShape(command.getLineData());
+			std::cout << "Successfully created line (" << shapesList.count << ")\n";
+		}
 		else
-			std::cout << "Invalid figure type! \n";
+			std::cout << "Invalid figure type!\n";
 	}
 	else
 		std::cout << "Open a file first! \n";
+}
+
+void SVGParser::erase(Command& command)
+{
+	if (isFileOpen)
+	{
+		int eraseIndex = command.getEraseIndex();
+		if (eraseIndex != -1 && eraseIndex != 0 && eraseIndex <= shapesList.count)
+		{
+			shapesList.deleteAtIndex(eraseIndex - 1);
+			std::cout << "Successfully erased figure at index " << eraseIndex << "!\n";
+		}
+		else
+			std::cout << "There is no figure at this index!\n";
+	}
+	else
+		std::cout << "There is no currently open file!\n";
+}
+
+void SVGParser::translate(Command& command)
+{
+	if (isFileOpen)
+	{
+		int translateIndex = command.getTranslateIndex();
+		double vertical = 0, horizontal = 0;
+		if (command.getTranslateProperty() == "vertical")
+		{
+			vertical = command.getTranslatePropertyValue();
+			horizontal = command.getTranslatePropertyValue();
+		}
+		else if (command.getTranslateProperty() == "horizontal")
+		{
+			horizontal = command.getTranslatePropertyValue();
+			vertical = command.getTranslatePropertyValue();
+		}
+		else
+		{
+			std::cout << "Wrong command format!\n";
+			return;
+		}
+		if (translateIndex == -1)
+		{
+			//translate all
+			for (size_t i = 0; i < shapesList.count; i++)
+			{
+				shapesList.shapes[i]->translateHorizontal(horizontal);
+				shapesList.shapes[i]->translateVertical(vertical);
+			}
+			std::cout << "Translated all figures!\n";
+		}
+		else
+		{
+			//translate at index
+			if (translateIndex <= 0 || translateIndex > shapesList.count)
+				std::cout << "Invalid translate index!\n";
+			else
+			{
+				shapesList.shapes[translateIndex - 1]->translateHorizontal(horizontal);
+				shapesList.shapes[translateIndex - 1]->translateVertical(vertical);
+				std::cout << "Translated figure at index " << translateIndex << "!\n";
+			}
+		}
+	}
+	else
+		std::cout << "There is no currently open file!\n";
 }

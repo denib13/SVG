@@ -23,6 +23,16 @@ void Circle::writeShapeToFile(std::ostream& stream) const
 	stream << *this;
 }
 
+void Circle::translateVertical(double value)
+{
+	center.setY(center.getY() + value);
+}
+
+void Circle::translateHorizontal(double value)
+{
+	center.setX(center.getX() + value);
+}
+
 std::ostream& operator<<(std::ostream& stream, const Circle& circle)
 {
 	stream << "circle cx=\"" << circle.center.getX() << "\" cy=\"" << circle.center.getY() <<

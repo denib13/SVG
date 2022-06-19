@@ -38,5 +38,7 @@ public:
 	//shortens the string so the new one begins from the index
 	void trim(unsigned index);
 	double toDouble() const;
+	void cutIntervalsInBeginning();
+	void cutIntervalsAtEnd();
 };
 bool operator==(const MyString& lhs, const MyString& rhs);

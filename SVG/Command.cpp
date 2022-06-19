@@ -44,26 +44,19 @@ void Command::takeCommand()
 	}
 	else
 	{
-		int intervalIndex = text.indexOf(" ");
+		text.trim(1);
+		text.cutIntervalsInBeginning();
+		int intervalIndex = text.indexOfChar(' ');
 		if (intervalIndex != -1)
 		{
+			setType(text.substring(0, intervalIndex));
 			text.trim(intervalIndex + 1);
-			intervalIndex = text.indexOf(" ");
-			if (intervalIndex != -1)
-			{
-				MyString cmdType = text.substring(0, intervalIndex);
-				text.trim(intervalIndex + 1);
-
-				cmd = text;
-				setType(cmdType);
-			}
-			else
-			{
-				setType(text);
-			}
+			cmd = text;
 		}
 		else
-			std::cout << "Invalid command format! \n";
+		{
+			setType(text);
+		}
 	}
 }
 
@@ -74,8 +67,12 @@ CmdType Command::getType() const
 
 MyString Command::getFilePath()
 {
-	//file path is the only argument in this type of command
-	return cmd;
+	cmd.cutIntervalsInBeginning();
+	int intervalIndex = cmd.indexOfChar(' ');
+	if(intervalIndex == -1)
+		return cmd;
+	else
+		return cmd.substring(0, intervalIndex);
 }
 
 MyString Command::getFigureType()
@@ -124,6 +121,7 @@ Line Command::getLineData()
 
 MyString Command::getProperties()
 {
+	cmd.cutIntervalsInBeginning();
 	int intervalIndex = cmd.indexOfChar(' ');
 	if (intervalIndex != -1)
 	{
@@ -133,5 +131,79 @@ MyString Command::getProperties()
 	}
 	else
 		return cmd;
+}
+
+int Command::getEraseIndex()
+{
+	MyString eraseIndexString = getProperties();
+	if (eraseIndexString == "" || eraseIndexString == " ")
+		return -1;
+	else
+		return atoi(eraseIndexString.getString());
+}
+
+int Command::getTranslateIndex()
+{
+	cmd.cutIntervalsInBeginning();
+	int intervalIndex = cmd.indexOfChar(' ');
+	if (intervalIndex != -1)
+	{
+		MyString resultString = cmd.substring(0, intervalIndex);
+		int result = atoi(resultString.getString());
+		if (result != 0 || (result == 0 && resultString.charAtIndex(0) == '0'))
+		{
+			cmd.trim(intervalIndex + 1);
+			return result;
+		}
+		else
+			return -1; //no index of figure to translate --> translate all
+	}
+	else
+	{
+		//wrong command format
+		int result = atoi(cmd.getString());
+		cmd = "";
+		return result;
+	}
+}
+
+MyString Command::getTranslateProperty()
+{
+	cmd.cutIntervalsInBeginning();
+	int equalsSignIndex = cmd.indexOfChar('=');
+	if (equalsSignIndex == -1)
+		return "";
+	else
+	{
+		MyString resultString = cmd.substring(0, equalsSignIndex);
+		resultString.cutIntervalsAtEnd();
+		return resultString;
+	} 
+}
+
+double Command::getTranslatePropertyValue()
+{
+	cmd.cutIntervalsInBeginning();
+	int equalsSignIndex = cmd.indexOfChar('=');
+	if (equalsSignIndex != -1)
+	{
+		cmd.trim(equalsSignIndex + 1);
+		cmd.cutIntervalsInBeginning();
+		int intervalIndex = cmd.indexOfChar(' ');
+		if (intervalIndex != -1)
+		{
+			MyString resultString = cmd.substring(0, intervalIndex);
+			cmd.trim(intervalIndex + 1);
+			return resultString.toDouble();
+		}
+		else
+		{
+			MyString resultString = cmd;
+			cmd = "";
+			return resultString.toDouble();
+		}
+	}
+	else
+		return 0; //wrong command format - no equals sign
 }
 

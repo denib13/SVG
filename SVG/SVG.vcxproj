@@ -150,7 +150,6 @@
     <ClCompile Include="SVGParser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Tickets\Tickets\List.hpp" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Line.h" />
