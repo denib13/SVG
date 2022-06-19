@@ -1,0 +1,9 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg>
+	 <rect x="20" y="35" width="5" height="10" fill="blue"/>
+	 <circle cx="55" cy="40" r="15" fill="red"/>
+	 <line x1="30" y1="25" x2="40" y2="15"/>
+	 <rect x="30" y="15" width="20" height="20" fill="green"/>
+</svg>

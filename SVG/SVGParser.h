@@ -17,6 +17,8 @@ class SVGParser
 	void createRectangle(MyString& figureData);
 	void createCircle(MyString& figureData);
 	void createLine(MyString& figureData);
+	void shapesWithinRectangle(const Rectangle& rect) const;
+	void shapesWithinCircle(const Circle& circle) const;
 public:
 	SVGParser();
 

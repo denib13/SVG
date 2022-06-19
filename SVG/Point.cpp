@@ -38,3 +38,8 @@ void Point::print() const
 {
 	std::cout << x << " " << y;
 }
+
+bool operator<=(const Point& lhs, const Point& rhs)
+{
+	return (lhs.getX() <= rhs.getX() && lhs.getY() <= rhs.getY());
+}

@@ -15,35 +15,39 @@ void SVGParser::readSvg(std::fstream& file)
 			svgFile.concat(symbol);
 		file.peek();
 	}
-	int startIndex = svgFile.indexOf("<svg>") + 5;
-	int endIndex = svgFile.getSize();
-	while(svgFile.charAtIndex(--endIndex) != '<') {}
-	while (startIndex != endIndex)
+	int indexOfSvg = svgFile.indexOf("<svg>");
+	if (indexOfSvg != -1 && indexOfSvg <= svgFile.getSize() && indexOfSvg >= 0)
 	{
-		if (svgFile.charAtIndex(startIndex) == '<')
+		int startIndex = indexOfSvg + 5;
+		int endIndex = svgFile.getSize();
+		while (svgFile.charAtIndex(--endIndex) != '<') {}
+		while (startIndex != endIndex)
 		{
-			startIndex++;
-			MyString figureData;
-			while (svgFile.charAtIndex(startIndex) != '/')
+			if (svgFile.charAtIndex(startIndex) == '<')
 			{
-				figureData.concat(svgFile.substring(startIndex, startIndex + 1));
 				startIndex++;
-			}
-			unsigned firstIntervalIndex = figureData.indexOf(" ");
-			MyString figureType = figureData.substring(0, firstIntervalIndex);
-			figureData.trim(firstIntervalIndex + 1);
+				MyString figureData;
+				while (svgFile.charAtIndex(startIndex) != '/')
+				{
+					figureData.concat(svgFile.substring(startIndex, startIndex + 1));
+					startIndex++;
+				}
+				unsigned firstIntervalIndex = figureData.indexOf(" ");
+				MyString figureType = figureData.substring(0, firstIntervalIndex);
+				figureData.trim(firstIntervalIndex + 1);
 
-			if (figureType == "rect")
-				createRectangle(figureData);
-			else if (figureType == "circle")
-				createCircle(figureData);
-			else if (figureType == "line")
-				createLine(figureData);
+				if (figureType == "rect")
+					createRectangle(figureData);
+				else if (figureType == "circle")
+					createCircle(figureData);
+				else if (figureType == "line")
+					createLine(figureData);
+				else
+					std::cout << "Unknown figure type!";
+			}
 			else
-				std::cout << "Unknown figure type!";
+				startIndex++;
 		}
-		else
-			startIndex++;
 	}
 }
 
@@ -105,6 +109,31 @@ void SVGParser::createLine(MyString& figureData)
 	delete[] properties;
 }
 
+void SVGParser::shapesWithinRectangle(const Rectangle& rect) const
+{
+	for (size_t i = 0; i < shapesList.count; i++)
+	{
+		if (rect.containsShape(shapesList.shapes[i]))
+		{
+			std::cout << i + 1 << ".";
+			shapesList.shapes[i]->print();
+			std::cout << '\n';
+		}
+	}
+}
+
+void SVGParser::shapesWithinCircle(const Circle& circle) const
+{
+	for (size_t i = 0; i < shapesList.count; i++)
+	{
+		if (circle.containsShape(shapesList.shapes[i]))
+		{
+			std::cout << i + 1 << ".";
+			shapesList.shapes[i]->print();
+			std::cout << '\n';
+		}
+	}
+}
 
 SVGParser::SVGParser() : shapesList(), currFilePath(), isFileOpen(false)
 { }
@@ -141,7 +170,7 @@ void SVGParser::run()
 		case 7: create(command); break;
 		case 8: erase(command); break;
 		case 9: translate(command); break;
-		//case 10: withinRegion(command); break;
+		case 10: withinRegion(command); break;
 		default:
 			break;
 		}
@@ -166,6 +195,7 @@ void SVGParser::open(Command& command)
 			closeFile(file);
 			std::fstream createFile(filePath.getString(), std::ios::out);
 			closeFile(createFile);
+			std::cout << "Successfully opened " << filePath << "!\n";
 		}
 		else
 		{
@@ -282,11 +312,16 @@ void SVGParser::print() const
 {
 	if (isFileOpen)
 	{
-		for (size_t i = 0; i < shapesList.count; i++)
+		if (shapesList.count == 0)
+			std::cout << "No figures in collection!\n";
+		else
 		{
-			std::cout << (i + 1) << ". ";
-			shapesList.shapes[i]->print();
-			std::cout << '\n';
+			for (size_t i = 0; i < shapesList.count; i++)
+			{
+				std::cout << (i + 1) << ". ";
+				shapesList.shapes[i]->print();
+				std::cout << '\n';
+			}
 		}
 	}
 	else
@@ -380,6 +415,28 @@ void SVGParser::translate(Command& command)
 				std::cout << "Translated figure at index " << translateIndex << "!\n";
 			}
 		}
+	}
+	else
+		std::cout << "There is no currently open file!\n";
+}
+
+void SVGParser::withinRegion(Command& command)
+{
+	if (isFileOpen)
+	{
+		MyString figureType = command.getFigureType();
+		if (figureType == "rectangle")
+		{
+			Rectangle region = command.getRectangleData();
+			shapesWithinRectangle(region);
+		}
+		else if (figureType == "circle")
+		{
+			Circle region = command.getCircleData();
+			shapesWithinCircle(region);
+		}
+		else
+			std::cout << "Invalid region type!\n";
 	}
 	else
 		std::cout << "There is no currently open file!\n";

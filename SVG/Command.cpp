@@ -38,7 +38,7 @@ void Command::takeCommand()
 	MyString text;
 	std::cin >> text;
 
-	if (text.charAtIndex(0) != '<')
+	if (text.charAtIndex(0) != '>')
 	{
 		std::cout << "Invalid command format! \n";
 	}

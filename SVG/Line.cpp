@@ -36,6 +36,16 @@ void Line::translateHorizontal(double value)
 	end.setX(end.getX() + value);
 }
 
+const Point& Line::getStart() const
+{
+	return start;
+}
+
+const Point& Line::getEnd() const
+{
+	return end;
+}
+
 ostream& operator<<(ostream& stream, const Line& line)
 {
 	stream << "line x1=\"" << line.start.getX() << "\" y1=\"" << line.start.getY() <<

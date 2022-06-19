@@ -17,5 +17,8 @@ public:
 	void translateVertical(double value) override;
 	void translateHorizontal(double value) override;
 
+	const Point& getStart() const;
+	const Point& getEnd() const;
+
 	friend std::ostream& operator<<(std::ostream& stream, const Line& line);
 };

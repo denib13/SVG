@@ -16,3 +16,4 @@ public:
 
 	void print() const;
 };
+bool operator<=(const Point& lhs, const Point& rhs);
