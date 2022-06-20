@@ -67,12 +67,7 @@ CmdType Command::getType() const
 
 MyString Command::getFilePath()
 {
-	cmd.cutIntervalsInBeginning();
-	int intervalIndex = cmd.indexOfChar(' ');
-	if(intervalIndex == -1)
-		return cmd;
-	else
-		return cmd.substring(0, intervalIndex);
+	return getProperties();
 }
 
 MyString Command::getFigureType()
@@ -130,7 +125,11 @@ MyString Command::getProperties()
 		return result;
 	}
 	else
-		return cmd;
+	{
+		MyString result = cmd;
+		cmd = "";
+		return result;
+	}
 }
 
 int Command::getEraseIndex()

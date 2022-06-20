@@ -2,11 +2,25 @@
 #include "Circle.h"
 #include <iostream>
 
+void Rectangle::setHeight(double newHeight)
+{
+	if (newHeight < 0)
+		newHeight *= (-1);
+	height = newHeight;
+}
+
+void Rectangle::setWidth(double newWidth)
+{
+	if (newWidth < 0)
+		newWidth *= (-1);
+	width = newWidth;
+}
+
 Rectangle::Rectangle(double x, double y, double width, double height, const char* fill)
 	: topLeft(x,y), fill(fill)
 {
-	this->height = height;
-	this->width = width;
+	setHeight(height);
+	setWidth(width);
 }
 
 Shape* Rectangle::clone() const
@@ -28,12 +42,14 @@ void Rectangle::writeShapeToFile(std::ostream& stream) const
 
 void Rectangle::translateVertical(double value)
 {
-	topLeft.setY(topLeft.getY() + value);
+	if(topLeft.getY() != 0 || value >= 0)
+		topLeft.setY(topLeft.getY() + value);
 }
 
 void Rectangle::translateHorizontal(double value)
 {
-	topLeft.setX(topLeft.getX() + value);
+	if(topLeft.getX() != 0 || value >= 0)
+		topLeft.setX(topLeft.getX() + value);
 }
 
 bool Rectangle::containsShape(Shape* shape) const

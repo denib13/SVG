@@ -11,6 +11,8 @@ class Circle : public virtual Shape
 	Point center;
 	double radius;
 	MyString fill;
+
+	void setRadius(double newRadius);
 public:
 	Circle(double x, double y, double radius, const char* fill);
 	~Circle() = default;

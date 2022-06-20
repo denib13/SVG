@@ -6,4 +6,9 @@
 	 <circle cx="55" cy="40" r="15" fill="red"/>
 	 <line x1="30" y1="25" x2="40" y2="15"/>
 	 <rect x="30" y="15" width="20" height="20" fill="green"/>
+	 <circle cx="10" cy="10" r="5" fill=""/>
+	 <rect x="0" y="0" width="20" height="20" fill="purple"/>
+	 <line x1="5" y1="24" x2="15" y2="10"/>
+	 <rect x="5" y="10" width="20" height="15" fill="pink"/>
+	 <circle cx="30" cy="30" r="10" fill="emerald"/>
 </svg>

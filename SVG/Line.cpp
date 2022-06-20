@@ -26,14 +26,18 @@ void Line::writeShapeToFile(std::ostream& stream) const
 
 void Line::translateVertical(double value)
 {
-	start.setY(start.getY() + value);
-	end.setY(end.getY() + value);
+	if(start.getY() != 0 || value >= 0)
+		start.setY(start.getY() + value);
+	if(end.getY() != 0 || value >= 0)
+		end.setY(end.getY() + value);
 }
 
 void Line::translateHorizontal(double value)
 {
-	start.setX(start.getX() + value);
-	end.setX(end.getX() + value);
+	if(start.getX() != 0 || value >= 0)
+		start.setX(start.getX() + value);
+	if(end.getX() != 0 || value >= 0)
+		end.setX(end.getX() + value);
 }
 
 const Point& Line::getStart() const

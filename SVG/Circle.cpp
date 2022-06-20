@@ -2,9 +2,16 @@
 #include "Rectangle.h"
 #include <iostream>
 
+void Circle::setRadius(double newRadius)
+{
+	if (newRadius < 0)
+		newRadius *= (-1);
+	radius = newRadius;
+}
+
 Circle::Circle(double x, double y, double radius, const char* fill) : center(x,y), fill(fill)
 {
-	this->radius = radius;
+	setRadius(radius);
 }
 
 Shape* Circle::clone() const
@@ -26,12 +33,14 @@ void Circle::writeShapeToFile(std::ostream& stream) const
 
 void Circle::translateVertical(double value)
 {
-	center.setY(center.getY() + value);
+	if(center.getY() != 0 || value >= 0)
+		center.setY(center.getY() + value);
 }
 
 void Circle::translateHorizontal(double value)
 {
-	center.setX(center.getX() + value);
+	if(center.getX() != 0 || value >= 0)
+		center.setX(center.getX() + value);
 }
 
 bool Circle::containsShape(Shape* shape) const

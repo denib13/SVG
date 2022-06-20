@@ -111,31 +111,47 @@ void SVGParser::createLine(MyString& figureData)
 
 void SVGParser::shapesWithinRectangle(const Rectangle& rect) const
 {
+	bool printedShape = false;
 	for (size_t i = 0; i < shapesList.count; i++)
 	{
 		if (rect.containsShape(shapesList.shapes[i]))
 		{
-			std::cout << i + 1 << ".";
+			std::cout << i + 1 << ". ";
 			shapesList.shapes[i]->print();
 			std::cout << '\n';
+			printedShape = true;
 		}
+	}
+	if (!printedShape)
+	{
+		std::cout << "No figures are located within ";
+		rect.print();
+		std::cout << "!\n";
 	}
 }
 
 void SVGParser::shapesWithinCircle(const Circle& circle) const
 {
+	bool printedShape = false;
 	for (size_t i = 0; i < shapesList.count; i++)
 	{
 		if (circle.containsShape(shapesList.shapes[i]))
 		{
-			std::cout << i + 1 << ".";
+			std::cout << i + 1 << ". ";
 			shapesList.shapes[i]->print();
 			std::cout << '\n';
+			printedShape = true;
 		}
+	}
+	if (!printedShape)
+	{
+		std::cout << "No figures are located within ";
+		circle.print();
+		std::cout << "!\n";
 	}
 }
 
-SVGParser::SVGParser() : shapesList(), currFilePath(), isFileOpen(false)
+SVGParser::SVGParser() : shapesList(), currFilePath(), isFileOpen(false), isSaved(true)
 { }
 
 void closeFile(std::fstream& file)
@@ -210,6 +226,14 @@ void SVGParser::close()
 {
 	if (isFileOpen)
 	{
+		if (!isSaved)
+		{
+			std::cout << "Do you want to save your changes (yes/no): ";
+			MyString answer;
+			std::cin >> answer;
+			if (answer == "yes")
+				save();
+		}
 		shapesList.emptyCollection();
 		isFileOpen = false;
 		std::cout << "Successfully closed " << currFilePath << "!\n";
@@ -231,6 +255,7 @@ void SVGParser::save()
 		else
 		{
 			writeSvg(file);
+			isSaved = true;
 			std::cout << "Successfully saved file " << currFilePath << "!\n";
 		}
 		closeFile(file);
@@ -252,6 +277,7 @@ void SVGParser::saveas(Command& command)
 		else
 		{
 			writeSvg(file);
+			isSaved = true;
 			std::cout << "Successfully saved file " << filePath << "!\n";
 		}
 		closeFile(file);
@@ -303,7 +329,15 @@ void SVGParser::help()
 void SVGParser::exit()
 {
 	if (isFileOpen)
-		std::cout << "You have an open file with unsaved changes, please select close or save first.\n";
+	{
+		if (isSaved)
+		{
+			close();
+			std::cout << "Exiting program...\n";
+		}
+		else
+			std::cout << "You have an open file with unsaved changes, please select close or save first.\n";
+	}
 	else
 		std::cout << "Exiting program...\n";
 }
@@ -332,6 +366,7 @@ void SVGParser::create(Command& command)
 {
 	if (isFileOpen)
 	{
+		isSaved = false;
 		MyString figureType = command.getFigureType();
 		if (figureType == "rectangle")
 		{
@@ -359,6 +394,7 @@ void SVGParser::erase(Command& command)
 {
 	if (isFileOpen)
 	{
+		isSaved = false;
 		int eraseIndex = command.getEraseIndex();
 		if (eraseIndex != -1 && eraseIndex != 0 && eraseIndex <= shapesList.count)
 		{
@@ -376,6 +412,7 @@ void SVGParser::translate(Command& command)
 {
 	if (isFileOpen)
 	{
+		isSaved = false;
 		int translateIndex = command.getTranslateIndex();
 		double vertical = 0, horizontal = 0;
 		if (command.getTranslateProperty() == "vertical")

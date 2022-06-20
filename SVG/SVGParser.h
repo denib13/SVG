@@ -9,8 +9,9 @@
 class SVGParser
 {
 	ShapeCollection shapesList;
-	bool isFileOpen;
 	MyString currFilePath;
+	bool isFileOpen;
+	bool isSaved;
 
 	void readSvg(std::fstream& file);
 	void writeSvg(std::fstream& file);

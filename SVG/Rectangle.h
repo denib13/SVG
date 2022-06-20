@@ -12,6 +12,9 @@ class Rectangle : public virtual Shape
 	double height;
 	double width;
 	MyString fill;
+
+	void setHeight(double newHeight);
+	void setWidth(double newWidth);
 public:
 	Rectangle(double x, double y, double height, double width, const char* fill);
 	~Rectangle() = default;
