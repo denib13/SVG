@@ -14,7 +14,7 @@ class SVGParser
 	bool isSaved;
 
 	void readSvg(std::fstream& file);
-	void writeSvg(std::fstream& file);
+	void writeSvg(std::fstream& file) const;
 	void createRectangle(MyString& figureData);
 	void createCircle(MyString& figureData);
 	void createLine(MyString& figureData);

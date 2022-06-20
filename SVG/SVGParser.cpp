@@ -51,7 +51,7 @@ void SVGParser::readSvg(std::fstream& file)
 	}
 }
 
-void SVGParser::writeSvg(std::fstream& file)
+void SVGParser::writeSvg(std::fstream& file) const
 {
 	file << "<?xml version=\"1.0\" standalone=\"no\"?>\n";
 	file << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n" << "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
@@ -204,6 +204,7 @@ void SVGParser::open(Command& command)
 		MyString filePath = command.getFilePath();
 		currFilePath = filePath;
 		isFileOpen = true;
+		isSaved = true;
 
 		std::fstream file(filePath.getString(), std::ios::in);
 		if (!file.is_open())
@@ -236,6 +237,7 @@ void SVGParser::close()
 		}
 		shapesList.emptyCollection();
 		isFileOpen = false;
+		isSaved = true;
 		std::cout << "Successfully closed " << currFilePath << "!\n";
 		currFilePath = "";
 	}
